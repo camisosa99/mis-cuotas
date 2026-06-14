@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Camila Sosa">
+    <title>Mis Cuotas — Tarjetas</title>
+    <link rel="stylesheet" href="node_modules/@tabler/icons-webfont/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+
+        <!-- HEADER -->
+        <div class="home-header">
+            <div class="app-name">Mis tarjetas</div>.
+            
+        </div>
+
+        <!-- LISTA DE TARJETAS -->
+        <!-- En la versión real estas tarjetas las carga JavaScript desde Firebase -->
+        <div class="tarjetas-list">
+
+            <div class="tarjeta-item">
+                <div class="tarjeta-color" style="background: #534AB7;"></div>
+                <div class="tarjeta-info">
+                    <div class="tarjeta-nombre">Visa</div>
+                    <div class="tarjeta-cierre">Cierre: día 30</div>
+                </div>
+                <button class="btn-editar">
+                    <i class="ti ti-pencil"></i>
+                </button>
+            </div>
+
+            <div class="tarjeta-item">
+                <div class="tarjeta-color" style="background: #D85A30;"></div>
+                <div class="tarjeta-info">
+                    <div class="tarjeta-nombre">Naranja</div>
+                    <div class="tarjeta-cierre">Cierre: día 15</div>
+                </div>
+                <button class="btn-editar">
+                    <i class="ti ti-pencil"></i>
+                </button>
+            </div>
+
+            <div class="tarjeta-item">
+                <div class="tarjeta-color" style="background: #1D9E75;"></div>
+                <div class="tarjeta-info">
+                    <div class="tarjeta-nombre">Mastercard</div>
+                    <div class="tarjeta-cierre">Cierre: día 5</div>
+                </div>
+                <button class="btn-editar">
+                    <i class="ti ti-pencil"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- BOTÓN AGREGAR TARJETA -->
+        <button class="btn-agregar-tarjeta">
+            <i class="ti ti-plus"></i>
+            Agregar tarjeta
+        </button>
+
+        <!-- BARRA DE NAVEGACIÓN -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="ti ti-calendar"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="tarjetas.html" class="nav-item active">
+                <i class="ti ti-credit-card"></i>
+                <span>Tarjetas</span>
+            </a>
+        </nav>
+
+    </div>
+
+</body>
+</html>

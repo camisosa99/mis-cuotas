@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Camila Sosa">
+    <title>Mis Cuotas</title>
+    <link rel="stylesheet" href="node_modules/@tabler/icons-webfont/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+
+        <!-- HEADER -->
+        <div class="home-header">
+            <div class="app-name">Mis cuotas</div>
+            <a href="nueva-cuota.html" class="btn-add">
+                <i class="ti ti-plus"></i>
+            </a>
+        </div>
+
+        <!-- NAVEGADOR DE MESES -->
+        <div class="month-nav">
+            <button class="month-arrow">
+                <i class="ti ti-chevron-left"></i>
+            </button>
+            <span class="month-label">Julio 2025</span>
+            <button class="month-arrow">
+                <i class="ti ti-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- TOTAL DEL MES -->
+        <div class="total-card">
+            <div class="total-label">Total del mes</div>
+            <div class="total-amount">$87.500</div>
+            <div class="total-cards">Visa $45.000 · Naranja $42.500</div>
+        </div>
+
+        <!-- LISTA DE CUOTAS -->
+        <div class="cuotas-list">
+
+            <a href="detalle-cuota.html" class="cuota-card">
+                <div class="cuota-dot" style="background: #534AB7;"></div>
+                <div class="cuota-info">
+                    <div class="cuota-nombre">Zapatillas Nike</div>
+                    <div class="cuota-sub">cuota 2 de 3 · Visa</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 66%; background: #534AB7;"></div>
+                    </div>
+                </div>
+                <div class="cuota-monto">$20.000</div>
+            </a>
+
+            <a href="detalle-cuota.html" class="cuota-card">
+                <div class="cuota-dot" style="background: #D85A30;"></div>
+                <div class="cuota-info">
+                    <div class="cuota-nombre">Auriculares</div>
+                    <div class="cuota-sub">cuota 1 de 6 · Naranja</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 16%; background: #D85A30;"></div>
+                    </div>
+                </div>
+                <div class="cuota-monto">$35.000</div>
+            </a>
+
+            <a href="detalle-cuota.html" class="cuota-card">
+                <div class="cuota-dot" style="background: #D85A30;"></div>
+                <div class="cuota-info">
+                    <div class="cuota-nombre">Ropa interior</div>
+                    <div class="cuota-sub">cuota 3 de 3 · Naranja</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%; background: #D85A30;"></div>
+                    </div>
+                </div>
+                <div class="cuota-monto">$7.500</div>
+            </a>
+
+            <a href="detalle-cuota.html" class="cuota-card">
+                <div class="cuota-dot" style="background: #534AB7;"></div>
+                <div class="cuota-info">
+                    <div class="cuota-nombre">Silla escritorio</div>
+                    <div class="cuota-sub">cuota 1 de 12 · Visa</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 8%; background: #534AB7;"></div>
+                    </div>
+                </div>
+                <div class="cuota-monto">$25.000</div>
+            </a>
+
+        </div>
+
+        <!-- BARRA DE NAVEGACIÓN -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item active">
+                <i class="ti ti-calendar"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="tarjetas.html" class="nav-item">
+                <i class="ti ti-credit-card"></i>
+                <span>Tarjetas</span>
+            </a>
+        </nav>
+
+    </div>
+
+</body>
+</html>

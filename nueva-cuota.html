@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Camila Sosa">
+    <title>Mis Cuotas — Nueva cuota</title>
+    <link rel="stylesheet" href="node_modules/@tabler/icons-webfont/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+
+        <!-- HEADER -->
+        <div class="form-header">
+            <a href="home.html" class="btn-back">
+                <i class="ti ti-chevron-left"></i>
+            </a>
+            <div class="form-title">Nueva cuota</div>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="form-body">
+
+            <!-- Nombre -->
+            <div class="field">
+                <label>Nombre</label>
+                <div class="input-wrap">
+                    <i class="ti ti-tag"></i>
+                    <input type="text" id="input-nombre" placeholder="Ej: Zapatillas Nike">
+                </div>
+            </div>
+
+            <!-- Selector de tarjeta -->
+            <div class="field">
+                <label>Tarjeta</label>
+                <!-- En la versión real estas opciones las genera JavaScript desde Firebase -->
+                <div class="tarjeta-selector">
+                    <button class="tarjeta-opt selected" data-tarjeta="Visa" data-color="#534AB7">
+                        <div class="tarjeta-opt-color" style="background: #534AB7;"></div>
+                        <span>Visa</span>
+                    </button>
+                    <button class="tarjeta-opt" data-tarjeta="Naranja" data-color="#D85A30">
+                        <div class="tarjeta-opt-color" style="background: #D85A30;"></div>
+                        <span>Naranja</span>
+                    </button>
+                    <button class="tarjeta-opt" data-tarjeta="Mastercard" data-color="#1D9E75">
+                        <div class="tarjeta-opt-color" style="background: #1D9E75;"></div>
+                        <span>Mastercard</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Monto -->
+            <div class="field">
+                <label>Monto</label>
+                <div class="monto-toggle">
+                    <button class="toggle-btn active" id="btn-por-cuota">Por cuota</button>
+                    <button class="toggle-btn" id="btn-total">Total</button>
+                </div>
+                <div class="input-wrap">
+                    <i class="ti ti-currency-dollar"></i>
+                    <input type="number" id="input-monto" placeholder="0">
+                </div>
+                <div class="field-hint" id="monto-hint">Ingresá el valor de cada cuota</div>
+            </div>
+
+            <!-- Cantidad de cuotas -->
+            <div class="field">
+                <label>Cantidad de cuotas</label>
+                <div class="input-wrap">
+                    <i class="ti ti-list-numbers"></i>
+                    <input type="number" id="input-total-cuotas" placeholder="Ej: 12" min="1">
+                </div>
+            </div>
+
+            <!-- Cuota actual -->
+            <div class="field">
+                <label>Cuota actual</label>
+                <div class="input-wrap">
+                    <i class="ti ti-number"></i>
+                    <input type="number" id="input-cuota-actual" placeholder="Ej: 1" min="1">
+                </div>
+                <div class="field-hint">¿En qué cuota estás ahora?</div>
+            </div>
+
+            <!-- Fecha de compra -->
+            <div class="field">
+                <label>Fecha de compra</label>
+                <div class="input-wrap">
+                    <i class="ti ti-calendar"></i>
+                    <input type="date" id="input-fecha">
+                </div>
+            </div>
+
+            <!-- Notas -->
+            <div class="field">
+                <label>Notas <span class="label-opcional">(opcional)</span></label>
+                <textarea id="input-notas" placeholder="Ej: Lo compré en cuotas sin interés en el Día del Padre"></textarea>
+            </div>
+
+        </div>
+
+        <!-- BOTÓN GUARDAR -->
+        <button class="btn-primary btn-guardar">Guardar cuota</button>
+
+    </div>
+
+    <script src="nueva-cuota.js"></script>
+
+</body>
+</html>

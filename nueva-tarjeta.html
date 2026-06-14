@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Camila Sosa">
+    <title>Mis Cuotas — Nueva tarjeta</title>
+    <link rel="stylesheet" href="node_modules/@tabler/icons-webfont/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+
+        <!-- HEADER -->
+        <div class="form-header">
+            <a href="tarjetas.html" class="btn-back">
+                <i class="ti ti-chevron-left"></i>
+            </a>
+            <div class="form-title">Nueva tarjeta</div>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="form-body">
+
+            <!-- Nombre -->
+            <div class="field">
+                <label>Nombre</label>
+                <div class="input-wrap">
+                    <i class="ti ti-credit-card"></i>
+                    <input type="text" placeholder="Ej: Visa, Naranja, Galicia">
+                </div>
+            </div>
+
+            <!-- Selector de color -->
+            <div class="field">
+                <label>Color</label>
+                <div class="color-grid">
+                    <button class="color-opt selected" style="background: #534AB7;" data-color="#534AB7" aria-label="Violeta"></button>
+                    <button class="color-opt" style="background: #3B82F6;" data-color="#3B82F6" aria-label="Azul"></button>
+                    <button class="color-opt" style="background: #06B6D4;" data-color="#06B6D4" aria-label="Celeste"></button>
+                    <button class="color-opt" style="background: #1D9E75;" data-color="#1D9E75" aria-label="Verde"></button>
+                    <button class="color-opt" style="background: #F59E0B;" data-color="#F59E0B" aria-label="Amarillo"></button>
+                    <button class="color-opt" style="background: #D85A30;" data-color="#D85A30" aria-label="Naranja"></button>
+                    <button class="color-opt" style="background: #EC4899;" data-color="#EC4899" aria-label="Rosa"></button>
+                    <button class="color-opt" style="background: #EF4444;" data-color="#EF4444" aria-label="Rojo"></button>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="tarjeta-preview">
+                <div class="preview-color" id="preview-color" style="background: #534AB7;"></div>
+                <div class="preview-info">
+                    <div class="preview-nombre" id="preview-nombre">Nombre de la tarjeta</div>
+                    <div class="preview-sub">Así se va a ver en tu lista</div>
+                </div>
+            </div>
+
+            <!-- Día de cierre -->
+            <div class="field">
+                <label>Día de cierre</label>
+                <div class="input-wrap">
+                    <i class="ti ti-calendar"></i>
+                    <input type="number" placeholder="Ej: 30" min="1" max="31" id="input-cierre">
+                </div>
+                <div class="field-hint">El día del mes en que cierra tu resumen</div>
+            </div>
+
+        </div>
+
+        <!-- BOTÓN GUARDAR -->
+        <button class="btn-primary btn-guardar">Guardar tarjeta</button>
+
+    </div>
+    <script src="nueva-tarjeta.js"></script>
+
+   
+
+</body>
+</html>
