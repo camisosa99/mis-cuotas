@@ -964,3 +964,32 @@ textarea::placeholder {
 
 .btn-eliminar:hover { background: #fee2e2; }
 .btn-eliminar i { font-size: 18px; }
+
+
+/* ====== HEADER ACTIONS (logout + agregar) ====== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-logout {
+    width: 34px;
+    height: 34px;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-logout:hover { background: #e2e8f0; }
+
+.btn-logout i {
+    font-size: 18px;
+    color: #64748b;
+}

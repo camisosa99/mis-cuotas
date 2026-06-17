@@ -20,8 +20,8 @@
   </div>
  
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('login')">Ingresar</button>
-    <button class="tab" onclick="switchTab('register')">Crear cuenta</button>
+    <button class="tab active">Ingresar</button>
+    <button class="tab">Crear cuenta</button>
   </div>
  
   <!-- LOGIN -->
@@ -100,15 +100,7 @@
  
 </div>
  
-<script>
-  function switchTab(tab) {
-    document.querySelectorAll('.tab').forEach((t, i) => {
-      t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
-    });
-    document.getElementById('panel-login').classList.toggle('active', tab === 'login');
-    document.getElementById('panel-register').classList.toggle('active', tab === 'register');
-  }
-</script>
+<script type="module" src="index.js"></script>
  
 </body>
 </html>
