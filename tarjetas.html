@@ -14,54 +14,18 @@
 
         <!-- HEADER -->
         <div class="home-header">
-            <div class="app-name">Mis tarjetas</div>.
-            
+            <div class="app-name">Mis tarjetas</div>
         </div>
 
         <!-- LISTA DE TARJETAS -->
-        <!-- En la versión real estas tarjetas las carga JavaScript desde Firebase -->
-        <div class="tarjetas-list">
-
-            <div class="tarjeta-item">
-                <div class="tarjeta-color" style="background: #534AB7;"></div>
-                <div class="tarjeta-info">
-                    <div class="tarjeta-nombre">Visa</div>
-                    <div class="tarjeta-cierre">Cierre: día 30</div>
-                </div>
-                <button class="btn-editar">
-                    <i class="ti ti-pencil"></i>
-                </button>
-            </div>
-
-            <div class="tarjeta-item">
-                <div class="tarjeta-color" style="background: #D85A30;"></div>
-                <div class="tarjeta-info">
-                    <div class="tarjeta-nombre">Naranja</div>
-                    <div class="tarjeta-cierre">Cierre: día 15</div>
-                </div>
-                <button class="btn-editar">
-                    <i class="ti ti-pencil"></i>
-                </button>
-            </div>
-
-            <div class="tarjeta-item">
-                <div class="tarjeta-color" style="background: #1D9E75;"></div>
-                <div class="tarjeta-info">
-                    <div class="tarjeta-nombre">Mastercard</div>
-                    <div class="tarjeta-cierre">Cierre: día 5</div>
-                </div>
-                <button class="btn-editar">
-                    <i class="ti ti-pencil"></i>
-                </button>
-            </div>
-
-        </div>
+        <!-- JavaScript llena este contenedor con las tarjetas reales del usuario -->
+        <div class="tarjetas-list" id="tarjetas-list"></div>
 
         <!-- BOTÓN AGREGAR TARJETA -->
-        <button class="btn-agregar-tarjeta">
+        <a href="nueva-tarjeta.html" class="btn-agregar-tarjeta">
             <i class="ti ti-plus"></i>
             Agregar tarjeta
-        </button>
+        </a>
 
         <!-- BARRA DE NAVEGACIÓN -->
         <nav class="bottom-nav">
@@ -76,6 +40,8 @@
         </nav>
 
     </div>
+
+    <script type="module" src="tarjetas.js"></script>
 
 </body>
 </html>
