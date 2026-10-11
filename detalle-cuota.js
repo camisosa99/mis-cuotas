@@ -13,6 +13,7 @@ const cuotaId = new URLSearchParams(window.location.search).get('id');
 if (!cuotaId) {
     window.location.href = 'home.html';
 }
+document.getElementById('btn-editar').href = `nueva-cuota.html?id=${cuotaId}`;
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {

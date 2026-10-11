@@ -2,21 +2,39 @@
 
 import { auth, db } from './firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// --- ¿Venimos a editar (?id=XXX) o a crear? ---
+const cuotaId = new URLSearchParams(window.location.search).get('id'); // null = cuota nueva
 
 let usuarioActual = null;
-let tarjetaSeleccionada = null; // { id, nombre, color }
+let tarjetaSeleccionada = null;   // { id, nombre, color, diaCierre, ... }
+const tarjetasPorId = {};         // para encontrar rápido la tarjeta de una cuota
+let modoMonto = 'cuota';          // 'cuota' | 'total'
 
+// --- Referencias del DOM ---
 const tarjetaSelector = document.querySelector('.tarjeta-selector');
+const inputNombre = document.getElementById('input-nombre');
+const inputMonto = document.getElementById('input-monto');
+const inputTotalCuotas = document.getElementById('input-total-cuotas');
+const inputFecha = document.getElementById('input-fecha');
+const inputNotas = document.getElementById('input-notas');
+const formTitle = document.getElementById('form-title');
+const btnGuardar = document.querySelector('.btn-guardar');
 
-// --- Protegemos la pantalla y cargamos las tarjetas del usuario ---
+// --- Protegemos la pantalla, cargamos tarjetas y (si corresponde) la cuota ---
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = 'index.html';
         return;
     }
     usuarioActual = user;
+
     await cargarTarjetas(user.uid);
+
+    if (cuotaId) {
+        await cargarCuotaParaEditar(cuotaId);
+    }
 });
 
 async function cargarTarjetas(userId) {
@@ -29,17 +47,19 @@ async function cargarTarjetas(userId) {
             return;
         }
 
-        tarjetaSelector.innerHTML = ''; // limpiamos las opciones hardcodeadas
+        tarjetaSelector.innerHTML = '';
 
-        snapshot.docs.forEach((doc, index) => {
-            const tarjeta = doc.data();
-            const btn = crearTarjetaOptHTML(doc.id, tarjeta, index === 0);
-            tarjetaSelector.appendChild(btn);
+        snapshot.docs.forEach((d, index) => {
+            const tarjeta = { id: d.id, ...d.data() };
+            tarjetasPorId[d.id] = tarjeta;
+            // En modo "nueva" dejamos la primera preseleccionada; al editar se elige la de la cuota
+            const preseleccionada = !cuotaId && index === 0;
+            tarjetaSelector.appendChild(crearTarjetaOptHTML(tarjeta, preseleccionada));
         });
 
-        // Seleccionamos la primera por defecto
-        const primera = snapshot.docs[0];
-        tarjetaSeleccionada = { id: primera.id, ...primera.data() };
+        if (!cuotaId) {
+            tarjetaSeleccionada = tarjetasPorId[snapshot.docs[0].id];
+        }
 
     } catch (error) {
         console.error(error);
@@ -47,10 +67,10 @@ async function cargarTarjetas(userId) {
     }
 }
 
-function crearTarjetaOptHTML(id, tarjeta, seleccionada) {
+function crearTarjetaOptHTML(tarjeta, seleccionada) {
     const btn = document.createElement('button');
     btn.className = 'tarjeta-opt' + (seleccionada ? ' selected' : '');
-    btn.dataset.id = id;
+    btn.dataset.id = tarjeta.id;
 
     btn.innerHTML = `
         <div class="tarjeta-opt-color" style="background: ${tarjeta.color};"></div>
@@ -58,43 +78,86 @@ function crearTarjetaOptHTML(id, tarjeta, seleccionada) {
     `;
 
     btn.addEventListener('click', () => {
-        document.querySelectorAll('.tarjeta-opt').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        tarjetaSeleccionada = { id, ...tarjeta };
+        marcarTarjetaEnUI(tarjeta.id);
+        tarjetaSeleccionada = tarjeta;
     });
 
     return btn;
+}
+
+function marcarTarjetaEnUI(id) {
+    document.querySelectorAll('.tarjeta-opt').forEach(b => {
+        b.classList.toggle('selected', b.dataset.id === id);
+    });
 }
 
 // --- Toggle por cuota / total ---
 const btnPorCuota = document.getElementById('btn-por-cuota');
 const btnTotal = document.getElementById('btn-total');
 const montoHint = document.getElementById('monto-hint');
-let modoMonto = 'cuota'; // 'cuota' | 'total'
 
-btnPorCuota.addEventListener('click', function() {
-    modoMonto = 'cuota';
-    btnPorCuota.classList.add('active');
-    btnTotal.classList.remove('active');
-    montoHint.textContent = 'Ingresá el valor de cada cuota';
-});
+function setModoMonto(modo) {
+    modoMonto = modo;
+    btnPorCuota.classList.toggle('active', modo === 'cuota');
+    btnTotal.classList.toggle('active', modo === 'total');
+    montoHint.textContent = modo === 'cuota'
+        ? 'Ingresá el valor de cada cuota'
+        : 'Ingresá el valor total de la compra';
+}
 
-btnTotal.addEventListener('click', function() {
-    modoMonto = 'total';
-    btnTotal.classList.add('active');
-    btnPorCuota.classList.remove('active');
-    montoHint.textContent = 'Ingresá el valor total de la compra';
-});
+btnPorCuota.addEventListener('click', () => setModoMonto('cuota'));
+btnTotal.addEventListener('click', () => setModoMonto('total'));
 
-// --- Guardar cuota ---
-const btnGuardar = document.querySelector('.btn-guardar');
+// --- Si estamos editando, rellenamos el formulario ---
+async function cargarCuotaParaEditar(id) {
+    try {
+        const snap = await getDoc(doc(db, 'cuotas', id));
 
+        if (!snap.exists() || snap.data().userId !== usuarioActual.uid) {
+            alert('No se encontró la cuota');
+            window.location.href = 'home.html';
+            return;
+        }
+
+        const cuota = snap.data();
+
+        inputNombre.value = cuota.nombre;
+        inputTotalCuotas.value = cuota.totalCuotas;
+        inputFecha.value = cuota.fechaCompra;
+        inputNotas.value = cuota.notas || '';
+
+        // El monto se muestra como valor por cuota
+        setModoMonto('cuota');
+        inputMonto.value = cuota.montoCuota;
+
+        // Tarjeta: si todavía existe la marcamos; si no, que elija otra
+        const tarjeta = tarjetasPorId[cuota.tarjetaId];
+        if (tarjeta) {
+            tarjetaSeleccionada = tarjeta;
+            marcarTarjetaEnUI(tarjeta.id);
+        } else {
+            tarjetaSeleccionada = null;
+            marcarTarjetaEnUI(null);
+            alert('La tarjeta de esta cuota ya no existe. Elegí otra para guardar los cambios.');
+        }
+
+        formTitle.textContent = 'Editar cuota';
+        btnGuardar.textContent = 'Guardar cambios';
+
+    } catch (error) {
+        console.error(error);
+        alert('Ocurrió un error al cargar la cuota');
+        window.location.href = 'home.html';
+    }
+}
+
+// --- Guardar (crear o actualizar) ---
 btnGuardar.addEventListener('click', async () => {
-    const nombre = document.getElementById('input-nombre').value.trim();
-    const monto = Number(document.getElementById('input-monto').value);
-    const totalCuotas = Number(document.getElementById('input-total-cuotas').value);
-    const fechaCompra = document.getElementById('input-fecha').value;
-    const notas = document.getElementById('input-notas').value.trim();
+    const nombre = inputNombre.value.trim();
+    const monto = Number(inputMonto.value);
+    const totalCuotas = Number(inputTotalCuotas.value);
+    const fechaCompra = inputFecha.value;
+    const notas = inputNotas.value.trim();
 
     // --- Validaciones ---
     if (!nombre) {
@@ -122,32 +185,39 @@ btnGuardar.addEventListener('click', async () => {
         return;
     }
 
-    // --- Calculamos monto por cuota y monto total según el modo ---
+    // --- Montos según el modo ---
     const montoCuota = modoMonto === 'cuota' ? monto : monto / totalCuotas;
     const montoTotal = modoMonto === 'total' ? monto : monto * totalCuotas;
-    // Mes en que cayó la cuota 1 (formato "2026-05"), calculado desde la cuota actual
-    // Mes de la primera cuota según fecha de compra y cierre de la tarjeta
+
+    // --- Mes de la primera cuota según fecha de compra y cierre de la tarjeta ---
     const [anioCompra, mesCompra, diaCompra] = fechaCompra.split('-').map(Number);
     const mesesHastaPrimeraCuota = diaCompra <= tarjetaSeleccionada.diaCierre ? 1 : 2;
     const primera = new Date(anioCompra, mesCompra - 1 + mesesHastaPrimeraCuota, 1);
     const mesPrimeraCuota = `${primera.getFullYear()}-${String(primera.getMonth() + 1).padStart(2, '0')}`;
 
-    try {
-        await addDoc(collection(db, 'cuotas'), {
-            nombre: nombre,
-            tarjetaId: tarjetaSeleccionada.id,
-            tarjetaNombre: tarjetaSeleccionada.nombre,
-            tarjetaColor: tarjetaSeleccionada.color,
-            montoCuota: montoCuota,
-            montoTotal: montoTotal,
-            totalCuotas: totalCuotas,
-            mesPrimeraCuota: mesPrimeraCuota,
-            fechaCompra: fechaCompra,
-            notas: notas,
-            userId: usuarioActual.uid
-        });
+    const datos = {
+        nombre: nombre,
+        tarjetaId: tarjetaSeleccionada.id,
+        tarjetaNombre: tarjetaSeleccionada.nombre,
+        tarjetaColor: tarjetaSeleccionada.color,
+        montoCuota: montoCuota,
+        montoTotal: montoTotal,
+        totalCuotas: totalCuotas,
+        mesPrimeraCuota: mesPrimeraCuota,
+        fechaCompra: fechaCompra,
+        notas: notas
+    };
 
-        window.location.href = 'home.html';
+    try {
+        if (cuotaId) {
+            // --- Modo edición ---
+            await updateDoc(doc(db, 'cuotas', cuotaId), datos);
+            window.location.href = `detalle-cuota.html?id=${cuotaId}`;
+        } else {
+            // --- Modo creación ---
+            await addDoc(collection(db, 'cuotas'), { ...datos, userId: usuarioActual.uid });
+            window.location.href = 'home.html';
+        }
     } catch (error) {
         console.error(error);
         alert('Ocurrió un error al guardar la cuota. Intentá de nuevo.');
