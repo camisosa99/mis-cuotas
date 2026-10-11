@@ -2,7 +2,7 @@
 
 import { auth, db } from './firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, addDoc, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, doc, getDoc, updateDoc, deleteDoc, query, where, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // --- Detectamos si venimos a editar (?id=XXX) o a crear ---
 const params = new URLSearchParams(window.location.search);
@@ -34,6 +34,16 @@ const btnEliminar = document.getElementById('btn-eliminar');
 inputNombre.addEventListener('input', function() {
     previewNombre.textContent = this.value || 'Nombre de la tarjeta';
 });
+
+// Trae las cuotas de esta tarjeta (las del usuario actual)
+async function obtenerCuotasDeTarjeta() {
+    const q = query(
+        collection(db, 'cuotas'),
+        where('userId', '==', usuarioActual.uid),
+        where('tarjetaId', '==', tarjetaId)
+    );
+    return await getDocs(q);
+}
 
 // --- Selector de color ---
 const colorOpts = document.querySelectorAll('.color-opt');
@@ -113,12 +123,25 @@ btnGuardar.addEventListener('click', async () => {
 
     try {
         if (tarjetaId) {
-            // --- Modo edición ---
-            await updateDoc(doc(db, 'tarjetas', tarjetaId), {
+            // --- Modo edición: actualizamos la tarjeta y sus cuotas juntas ---
+            const batch = writeBatch(db);
+
+            batch.update(doc(db, 'tarjetas', tarjetaId), {
                 nombre: nombre,
                 color: colorSeleccionado,
                 diaCierre: Number(diaCierre)
             });
+
+            const cuotasSnap = await obtenerCuotasDeTarjeta();
+
+            cuotasSnap.forEach((c) => {
+                batch.update(c.ref, {
+                    tarjetaNombre: nombre,
+                    tarjetaColor: colorSeleccionado
+                });
+            });
+
+            await batch.commit();
         } else {
             // --- Modo creación ---
             await addDoc(collection(db, 'tarjetas'), {
@@ -138,10 +161,19 @@ btnGuardar.addEventListener('click', async () => {
 
 // --- Eliminar ---
 btnEliminar.addEventListener('click', async () => {
-    const confirmar = confirm('¿Seguro que querés eliminar esta tarjeta? Esta acción no se puede deshacer.');
-    if (!confirmar) return;
-
     try {
+        // Primero chequeamos que no tenga cuotas cargadas
+        const cuotasSnap = await obtenerCuotasDeTarjeta();
+
+        if (!cuotasSnap.empty) {
+            const n = cuotasSnap.size;
+            alert(`No se puede eliminar: esta tarjeta tiene ${n} ${n === 1 ? 'cuota cargada' : 'cuotas cargadas'}. Eliminá esas cuotas o pasalas a otra tarjeta (desde su pantalla de edición) y después volvé a intentar.`);
+            return;
+        }
+
+        const confirmar = confirm('¿Seguro que querés eliminar esta tarjeta? Esta acción no se puede deshacer.');
+        if (!confirmar) return;
+
         await deleteDoc(doc(db, 'tarjetas', tarjetaId));
         window.location.href = 'tarjetas.html';
     } catch (error) {
