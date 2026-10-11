@@ -31,7 +31,7 @@ async function cargarTarjetas(userId) {
 
         snapshot.forEach((doc) => {
             const tarjeta = doc.data();
-            const item = crearTarjetaHTML(tarjeta);
+            const item = crearTarjetaHTML(doc.id, tarjeta);
             tarjetasList.appendChild(item);
         });
 
@@ -42,7 +42,7 @@ async function cargarTarjetas(userId) {
 }
 
 // Genera el HTML de una tarjeta a partir de sus datos
-function crearTarjetaHTML(tarjeta) {
+function crearTarjetaHTML(id, tarjeta) {
     const div = document.createElement('div');
     div.className = 'tarjeta-item';
 
@@ -56,6 +56,9 @@ function crearTarjetaHTML(tarjeta) {
             <i class="ti ti-pencil"></i>
         </button>
     `;
+    div.querySelector('.btn-editar').addEventListener('click', () => {
+        window.location.href = `nueva-tarjeta.html?id=${id}`;
+    });
 
     return div;
 }

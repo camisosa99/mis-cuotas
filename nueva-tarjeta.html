@@ -17,7 +17,7 @@
             <a href="tarjetas.html" class="btn-back">
                 <i class="ti ti-chevron-left"></i>
             </a>
-            <div class="form-title">Nueva tarjeta</div>
+            <div class="form-title" id="form-title">Nueva tarjeta</div>
         </div>
 
         <!-- FORMULARIO -->
@@ -28,7 +28,7 @@
                 <label>Nombre</label>
                 <div class="input-wrap">
                     <i class="ti ti-credit-card"></i>
-                    <input type="text" placeholder="Ej: Visa, Naranja, Galicia">
+                    <input type="text" id="input-nombre" placeholder="Ej: Visa, Naranja, Galicia">
                 </div>
             </div>
 
@@ -71,6 +71,10 @@
         <!-- BOTÓN GUARDAR -->
         <button class="btn-primary btn-guardar">Guardar tarjeta</button>
 
+        <!-- BOTÓN ELIMINAR (solo visible en modo edición) -->
+        <button class="btn-secundario btn-eliminar" id="btn-eliminar" style="display:none;">
+            Eliminar tarjeta
+        </button>
     </div>
     <script type="module" src="nueva-tarjeta.js"></script>
 
