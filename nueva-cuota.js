@@ -93,7 +93,6 @@ btnGuardar.addEventListener('click', async () => {
     const nombre = document.getElementById('input-nombre').value.trim();
     const monto = Number(document.getElementById('input-monto').value);
     const totalCuotas = Number(document.getElementById('input-total-cuotas').value);
-    const cuotaActual = Number(document.getElementById('input-cuota-actual').value);
     const fechaCompra = document.getElementById('input-fecha').value;
     const notas = document.getElementById('input-notas').value.trim();
 
@@ -114,10 +113,6 @@ btnGuardar.addEventListener('click', async () => {
         alert('Ingresá la cantidad de cuotas');
         return;
     }
-    if (!cuotaActual || cuotaActual < 1 || cuotaActual > totalCuotas) {
-        alert('La cuota actual debe estar entre 1 y la cantidad total de cuotas');
-        return;
-    }
     if (!fechaCompra) {
         alert('Ingresá la fecha de compra');
         return;
@@ -131,9 +126,11 @@ btnGuardar.addEventListener('click', async () => {
     const montoCuota = modoMonto === 'cuota' ? monto : monto / totalCuotas;
     const montoTotal = modoMonto === 'total' ? monto : monto * totalCuotas;
     // Mes en que cayó la cuota 1 (formato "2026-05"), calculado desde la cuota actual
-    const hoy = new Date();
-    const primerMes = new Date(hoy.getFullYear(), hoy.getMonth() - (cuotaActual - 1), 1);
-    const mesPrimeraCuota = `${primerMes.getFullYear()}-${String(primerMes.getMonth() + 1).padStart(2, '0')}`;
+    // Mes de la primera cuota según fecha de compra y cierre de la tarjeta
+    const [anioCompra, mesCompra, diaCompra] = fechaCompra.split('-').map(Number);
+    const mesesHastaPrimeraCuota = diaCompra <= tarjetaSeleccionada.diaCierre ? 1 : 2;
+    const primera = new Date(anioCompra, mesCompra - 1 + mesesHastaPrimeraCuota, 1);
+    const mesPrimeraCuota = `${primera.getFullYear()}-${String(primera.getMonth() + 1).padStart(2, '0')}`;
 
     try {
         await addDoc(collection(db, 'cuotas'), {
@@ -144,7 +141,6 @@ btnGuardar.addEventListener('click', async () => {
             montoCuota: montoCuota,
             montoTotal: montoTotal,
             totalCuotas: totalCuotas,
-            cuotaActual: cuotaActual,
             mesPrimeraCuota: mesPrimeraCuota,
             fechaCompra: fechaCompra,
             notas: notas,

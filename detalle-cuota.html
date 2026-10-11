@@ -18,8 +18,8 @@
                 <i class="ti ti-chevron-left"></i>
             </a>
             <div class="detalle-header-info">
-                <div class="form-title">Zapatillas Nike</div>
-                <div class="detalle-subtitulo">Visa · comprado el 15 may</div>
+                <div class="form-title" id="detalle-nombre"></div>
+                <div class="detalle-subtitulo" id="detalle-subtitulo"></div>
             </div>
             <a href="nueva-cuota.html" class="btn-editar-header">
                 <i class="ti ti-pencil"></i>
@@ -28,11 +28,11 @@
 
         <!-- CARD PRINCIPAL -->
         <div class="detalle-hero">
-            <div class="detalle-hero-label">Cuota actual · 2 de 3</div>
-            <div class="detalle-hero-monto">$20.000</div>
-            <div class="detalle-hero-sub">Total de la compra: $60.000</div>
+            <div class="detalle-hero-label" id="hero-label"></div>
+            <div class="detalle-hero-monto" id="hero-monto"></div>
+            <div class="detalle-hero-sub" id="hero-sub"></div>
             <div class="detalle-progress-bar">
-                <div class="detalle-progress-fill" style="width: 66%;"></div>
+                <div class="detalle-progress-fill" id="hero-progreso" style="width: 0%;"></div>
             </div>
         </div>
 
@@ -40,81 +40,49 @@
         <div class="detalle-grid">
             <div class="detalle-dato">
                 <div class="detalle-dato-label">Ya pagaste</div>
-                <div class="detalle-dato-valor">$40.000</div>
-                <div class="detalle-dato-sub">2 cuotas</div>
+                <div class="detalle-dato-valor" id="dato-pagado"></div>
+                <div class="detalle-dato-sub" id="dato-pagado-sub"></div>
             </div>
             <div class="detalle-dato">
                 <div class="detalle-dato-label">Falta pagar</div>
-                <div class="detalle-dato-valor">$20.000</div>
-                <div class="detalle-dato-sub">1 cuota</div>
+                <div class="detalle-dato-valor" id="dato-falta"></div>
+                <div class="detalle-dato-sub" id="dato-falta-sub"></div>
             </div>
-            <div class="detalle-dato">
-                <div class="detalle-dato-label">Tarjeta</div>
-                <div class="detalle-dato-valor">
-                    <span class="detalle-tarjeta-dot" style="background: #534AB7;"></span>
-                    Visa
-                </div>
-                <div class="detalle-dato-sub">Cierre día 30</div>
+        <div class="detalle-dato">
+            <div class="detalle-dato-label">Tarjeta</div>
+            <div class="detalle-dato-valor">
+                <span class="detalle-tarjeta-dot" id="dato-tarjeta-dot"></span>
+                <span id="dato-tarjeta"></span>
             </div>
-            <div class="detalle-dato">
-                <div class="detalle-dato-label">Última cuota</div>
-                <div class="detalle-dato-valor">Ago 2025</div>
-                <div class="detalle-dato-sub">1 mes más</div>
-            </div>
+            <div class="detalle-dato-sub" id="dato-cierre"></div>
         </div>
+        <div class="detalle-dato">
+            <div class="detalle-dato-label">Última cuota</div>
+            <div class="detalle-dato-valor" id="dato-ultima"></div>
+            <div class="detalle-dato-sub" id="dato-ultima-sub"></div>
+        </div>
+    </div>  
 
         <!-- HISTORIAL -->
-        <div class="detalle-section-title">Historial de cuotas</div>
-        <div class="timeline">
+    <div class="detalle-section-title">Historial de cuotas</div>
+    <div class="timeline" id="timeline"></div>
 
-            <div class="tl-item">
-                <div class="tl-dot tl-done">
-                    <i class="ti ti-check"></i>
-                </div>
-                <div class="tl-info">
-                    <div class="tl-nombre">Cuota 1 de 3</div>
-                    <div class="tl-fecha">Junio 2025</div>
-                </div>
-                <div class="tl-monto">$20.000</div>
-            </div>
-
-            <div class="tl-item">
-                <div class="tl-dot tl-actual">
-                    <i class="ti ti-credit-card"></i>
-                </div>
-                <div class="tl-info">
-                    <div class="tl-nombre">Cuota 2 de 3 <span class="tl-badge">este mes</span></div>
-                    <div class="tl-fecha">Julio 2025</div>
-                </div>
-                <div class="tl-monto tl-monto-actual">$20.000</div>
-            </div>
-
-            <div class="tl-item">
-                <div class="tl-dot tl-pendiente"></div>
-                <div class="tl-info">
-                    <div class="tl-nombre tl-nombre-pendiente">Cuota 3 de 3</div>
-                    <div class="tl-fecha">Agosto 2025</div>
-                </div>
-                <div class="tl-monto">$20.000</div>
-            </div>
-
-        </div>
-
-        <!-- NOTAS -->
+    <!-- NOTAS -->
+    <div id="seccion-notas">
         <div class="detalle-section-title">Notas</div>
-        <div class="detalle-notas">
-            En realidad lo compré el 29, pero lo pasaron al 15 del mes siguiente por el cierre de la tarjeta.
-        </div>
-
-        <!-- BOTÓN ELIMINAR -->
-        <button class="btn-eliminar">
-            <i class="ti ti-trash"></i>
-            Eliminar cuota
-        </button>
-
+        <div class="detalle-notas" id="detalle-notas"></div>
     </div>
 
-    <script src="detalle-cuota.js"></script>
+    <!-- BOTÓN ELIMINAR -->
+    <button class="btn-eliminar" id="btn-eliminar">
+        <i class="ti ti-trash"></i>
+        Eliminar cuota
+    </button>
+
+</div>
+
+<script type="module" src="detalle-cuota.js"></script>
+
 
 </body>
 </html>
