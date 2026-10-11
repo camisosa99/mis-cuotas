@@ -31,7 +31,7 @@ async function cargarTarjetas(userId) {
 
         tarjetaSelector.innerHTML = ''; // limpiamos las opciones hardcodeadas
 
-        snapshot.forEach((doc, index) => {
+        snapshot.docs.forEach((doc, index) => {
             const tarjeta = doc.data();
             const btn = crearTarjetaOptHTML(doc.id, tarjeta, index === 0);
             tarjetaSelector.appendChild(btn);
@@ -130,6 +130,10 @@ btnGuardar.addEventListener('click', async () => {
     // --- Calculamos monto por cuota y monto total según el modo ---
     const montoCuota = modoMonto === 'cuota' ? monto : monto / totalCuotas;
     const montoTotal = modoMonto === 'total' ? monto : monto * totalCuotas;
+    // Mes en que cayó la cuota 1 (formato "2026-05"), calculado desde la cuota actual
+    const hoy = new Date();
+    const primerMes = new Date(hoy.getFullYear(), hoy.getMonth() - (cuotaActual - 1), 1);
+    const mesPrimeraCuota = `${primerMes.getFullYear()}-${String(primerMes.getMonth() + 1).padStart(2, '0')}`;
 
     try {
         await addDoc(collection(db, 'cuotas'), {
@@ -141,6 +145,7 @@ btnGuardar.addEventListener('click', async () => {
             montoTotal: montoTotal,
             totalCuotas: totalCuotas,
             cuotaActual: cuotaActual,
+            mesPrimeraCuota: mesPrimeraCuota,
             fechaCompra: fechaCompra,
             notas: notas,
             userId: usuarioActual.uid
